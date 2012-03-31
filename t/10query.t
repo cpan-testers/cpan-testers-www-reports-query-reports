@@ -1,0 +1,117 @@
+#!/usr/bin/perl -w
+use strict;
+
+use lib qw(./lib);
+use Test::More tests => 13;
+
+use CPAN::Testers::WWW::Reports::Query::Reports;
+use Data::Dumper;
+
+# various argument sets for examples
+
+my @args = (
+    { 
+        date    => '2005-02-08',
+        results => { from => 182971, to => 183076, range => '182971-183076' }
+    },
+    { 
+        date    => '',
+        results => undef
+    },
+    { 
+        range   => '7211',
+        results => { '7211' => {
+                        'version'   => '1.25',
+                        'dist'      => 'GD',
+                        'osvers'    => '2.7',
+                        'state'     => 'pass',
+                        'perl'      => '5.5.3',
+                        'fulldate'  => '200002231727',
+                        'osname'    => 'solaris',
+                        'postdate'  => '200002',
+                        'platform'  => 'sun4-solaris',
+                        'guid'      => '00007211-b19f-3f77-b713-d32bba55d77f',
+                        'id'        => '7211',
+                        'type'      => '2',
+                        'tester'    => 'schinder@pobox.com'
+                   } }
+    },
+    { 
+        range   => '7211-',
+        start   => 7211,
+        count   => 2500,
+        results => { '7211' => {
+                        'version'   => '1.25',
+                        'dist'      => 'GD',
+                        'osvers'    => '2.7',
+                        'state'     => 'pass',
+                        'perl'      => '5.5.3',
+                        'fulldate'  => '200002231727',
+                        'osname'    => 'solaris',
+                        'postdate'  => '200002',
+                        'platform'  => 'sun4-solaris',
+                        'guid'      => '00007211-b19f-3f77-b713-d32bba55d77f',
+                        'id'        => '7211',
+                        'type'      => '2',
+                        'tester'    => 'schinder@pobox.com'
+                   } }
+    },
+    { 
+        range   => '-7211',
+        stop    => 7211,
+        count   => 2500,
+        results => { '7211' => {
+                        'version'   => '1.25',
+                        'dist'      => 'GD',
+                        'osvers'    => '2.7',
+                        'state'     => 'pass',
+                        'perl'      => '5.5.3',
+                        'fulldate'  => '200002231727',
+                        'osname'    => 'solaris',
+                        'postdate'  => '200002',
+                        'platform'  => 'sun4-solaris',
+                        'guid'      => '00007211-b19f-3f77-b713-d32bba55d77f',
+                        'id'        => '7211',
+                        'type'      => '2',
+                        'tester'    => 'schinder@pobox.com'
+                   } }
+    },
+    { 
+        range   => '-',
+        count   => 2500
+    }
+);
+
+my $query = CPAN::Testers::WWW::Reports::Query::Reports->new();
+isa_ok($query,'CPAN::Testers::WWW::Reports::Query::Reports','.. got response');
+
+for my $args (@args) {
+    if(defined $args->{date}) {
+        my $data = $query->date( $args->{date} );
+        if($args->{results}) {
+            is($data->{$_},$args->{results}{$_},".. got '$_' in date hash [$args->{date}]") for(keys %{$args->{results}});
+        } else {
+            is($data, undef,".. got no results, as expected [$args->{date}]");
+        }
+    } elsif(defined $args->{range}) {
+        my $data = $query->range( $args->{range} );
+        if($args->{results}) {
+            #diag(Dumper( $data ));
+            is_deeply($data->{$_},$args->{results}{$_},".. got '$_' in range hash [$args->{range}]") 
+                for(keys %{$args->{results}});
+        }
+        my @keys = sort { $a <=> $b } keys %$data;
+        if($args->{start}) {
+            is($keys[0], $args->{start},".. got start value [$args->{range}]");
+        }
+        if($args->{stop}) {
+            is($keys[-1], $args->{stop},".. got stop value [$args->{range}]");
+        }
+        if($args->{count}) {
+            cmp_ok(scalar @keys, '<=', $args->{count},".. counted number of records [$args->{range}]");
+        }
+    } else {
+        ok(0,'missing date or range test');
+    }
+}
+

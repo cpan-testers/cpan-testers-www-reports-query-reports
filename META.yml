@@ -1,0 +1,33 @@
+--- #YAML:1.0
+name:                CPAN::Testers::WWW::Reports::Query::Reports
+version:             0.01
+abstract:            Retrieve CPAN Testers metadata direct from the CPAN Testers website.
+author:
+  - Barbie <barbie@cpan.org>
+
+license:             perl
+distribution_type:   module
+installdirs:         site
+
+requires:
+  WWW::Mechanize:       0
+recommends:
+  Test::More:           0.70
+  Test::Pod:            1.00
+  Test::Pod::Coverage:  0.08
+  Test::CPAN::Meta:     0.12
+build_requires:
+  Test::More:           0.01
+
+provides:
+  CPAN::Testers::WWW::Reports::Query::Reports:
+    file:     lib/CPAN/Testers/WWW/Reports/Query/Reports.pm
+    version:  0.01
+
+resources:
+  repository: http://github.com/barbie/cpan-testers-www-reports-query-reports
+
+meta-spec:
+   version:   1.4
+   url:       http://module-build.sourceforge.net/META-spec-v1.4.html
+generated_by: Hand 1.0
