@@ -6,6 +6,7 @@ WriteMakefile(
     'VERSION_FROM'  => 'lib/CPAN/Testers/WWW/Reports/Query/Reports.pm',
     'PREREQ_PM'     => {
         WWW::Mechanize      => 0,
+        JSON::XS            => 0
     },
 
     'NO_META'       => 1,
