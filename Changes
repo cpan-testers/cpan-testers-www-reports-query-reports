@@ -1,5 +1,9 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 
+0.03	05/04/2012
+	- missed JSON::XS from prereq lists :(
+	- added META.json (and test script)
+
 0.02    31/03/2012
 	- now with the correct README!
 
