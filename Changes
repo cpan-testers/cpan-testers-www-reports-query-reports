@@ -1,5 +1,8 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 
+0.04	06/04/2012
+	- added ping test & skip if no network.
+
 0.03	05/04/2012
 	- missed JSON::XS from prereq lists :(
 	- added META.json (and test script)

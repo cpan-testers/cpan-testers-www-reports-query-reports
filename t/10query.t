@@ -85,33 +85,49 @@ my @args = (
 my $query = CPAN::Testers::WWW::Reports::Query::Reports->new();
 isa_ok($query,'CPAN::Testers::WWW::Reports::Query::Reports','.. got response');
 
-for my $args (@args) {
-    if(defined $args->{date}) {
-        my $data = $query->date( $args->{date} );
-        if($args->{results}) {
-            is($data->{$_},$args->{results}{$_},".. got '$_' in date hash [$args->{date}]") for(keys %{$args->{results}});
+SKIP: {
+    skip "Network unavailable", 12 if(pingtest());
+
+    for my $args (@args) {
+        if(defined $args->{date}) {
+            my $data = $query->date( $args->{date} );
+            if($args->{results}) {
+                is($data->{$_},$args->{results}{$_},".. got '$_' in date hash [$args->{date}]") for(keys %{$args->{results}});
+            } else {
+                is($data, undef,".. got no results, as expected [$args->{date}]");
+            }
+        } elsif(defined $args->{range}) {
+            my $data = $query->range( $args->{range} );
+            if($args->{results}) {
+                #diag(Dumper( $data ));
+                is_deeply($data->{$_},$args->{results}{$_},".. got '$_' in range hash [$args->{range}]") 
+                    for(keys %{$args->{results}});
+            }
+            my @keys = sort { $a <=> $b } keys %$data;
+            if($args->{start}) {
+                is($keys[0], $args->{start},".. got start value [$args->{range}]");
+            }
+            if($args->{stop}) {
+                is($keys[-1], $args->{stop},".. got stop value [$args->{range}]");
+            }
+            if($args->{count}) {
+                cmp_ok(scalar @keys, '<=', $args->{count},".. counted number of records [$args->{range}]");
+            }
         } else {
-            is($data, undef,".. got no results, as expected [$args->{date}]");
+            ok(0,'missing date or range test');
         }
-    } elsif(defined $args->{range}) {
-        my $data = $query->range( $args->{range} );
-        if($args->{results}) {
-            #diag(Dumper( $data ));
-            is_deeply($data->{$_},$args->{results}{$_},".. got '$_' in range hash [$args->{range}]") 
-                for(keys %{$args->{results}});
-        }
-        my @keys = sort { $a <=> $b } keys %$data;
-        if($args->{start}) {
-            is($keys[0], $args->{start},".. got start value [$args->{range}]");
-        }
-        if($args->{stop}) {
-            is($keys[-1], $args->{stop},".. got stop value [$args->{range}]");
-        }
-        if($args->{count}) {
-            cmp_ok(scalar @keys, '<=', $args->{count},".. counted number of records [$args->{range}]");
-        }
-    } else {
-        ok(0,'missing date or range test');
     }
 }
 
+# crude, but it'll hopefully do ;)
+sub pingtest {
+    my $domain = 'www.cpantesters.org';
+    my $cmd =   $^O =~ /solaris/i                           ? "ping -s $domain 56 1" :
+                $^O =~ /dos|os2|mswin32|netware|cygwin/i    ? "ping -n 1 $domain "
+                                                            : "ping -c 1 $domain >/dev/null 2>&1";
+
+    system($cmd);
+    my $retcode = $? >> 8;
+    # ping returns 1 if unable to connect
+    return $retcode;
+}
