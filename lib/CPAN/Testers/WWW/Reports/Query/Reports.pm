@@ -3,7 +3,7 @@ package CPAN::Testers::WWW::Reports::Query::Reports;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
  
 #----------------------------------------------------------------------------
 
@@ -54,6 +54,9 @@ for that date. A range request will return the records for the requested IDs.
     # get the raw data for all results, or a specific version if supplied
     my $data = $query->raw;
 
+
+    # get the last error
+    my $error = $query->error;
 
 =head2 Caveat
 
@@ -120,12 +123,13 @@ sub range {
 sub _request {
     my $self    = shift;
     my $param   = shift || return;
+    $self->{error} = '';
 
     my $url = join( '?', $URL, $param );
     #print "URL: $url\n";
 	eval { $mech->get( $url ); };
     if($@ || !$mech->success()) {
-        die $@;
+        $self->{error} = $@;
         return;
     }
 
@@ -134,8 +138,17 @@ sub _request {
 
 sub _parse {
     my $self    = shift;
+    my $data;
+    eval { $data = decode_json($self->{content}) };
+    return $data    unless($@ || !$data);
 
-    return decode_json($self->{content});
+    $self->{error} = $@ || 'no data returned';
+    return;
+}
+
+sub error {
+    my $self    = shift;
+    return $self->{error};
 }
 
 q("With thanks to the 2012 QA Hackathon");
@@ -177,6 +190,10 @@ For the given range, returns the metadata records stored for those IDs.
 =item * raw
 
 Returns the raw content returned from the server.
+
+=item * error
+
+Returns the last recorded error.
 
 =back
 

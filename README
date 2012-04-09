@@ -1,10 +1,6 @@
-User Contributed Documentation  CPAN::Testers::WWW::Reports::Query::Reports(3)
-
-
 NAME
-       CPAN::Testers::WWW::Reports::Query::Reports - Retrieve CPAN Testers
-       metadata direct from the CPAN Testers website.
-
+       CPAN::Testers::WWW::Reports::Query::Reports
+       
 DESCRIPTION
        This module queries the CPAN Testers website and retrieves a data set.
        For a date request, the data set returned relates to the ids that can
@@ -47,6 +43,9 @@ SYNOPSIS
            # get the raw data for all results, or a specific version if supplied
            my $data = $query->raw;
 
+	   # get the last error
+	   my $error = $query->error;
+
    Caveat
        When using the range parameter, note that at most 2500 records will be
        returned. This is to avoid accidental request for all the records!
@@ -78,6 +77,10 @@ INTERFACE
 
            Returns the raw content returned from the server.
 
+       ·   error
+
+           Returns the last recorded error.
+
 BUGS, PATCHES & FIXES
        There are no known bugs at the time of this release. However, if you
        spot a bug or are experiencing difficulties, that is not explained
@@ -107,7 +110,3 @@ COPYRIGHT AND LICENSE
 
          This module is free software; you can redistribute it and/or
          modify it under the Artistic License 2.0.
-
-
-
-perl v5.10.1                    CPAN::Testers::WWW::Reports::Query::Reports(3)

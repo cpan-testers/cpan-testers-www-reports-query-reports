@@ -2,7 +2,7 @@
 use strict;
 
 use lib qw(./lib);
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use CPAN::Testers::WWW::Reports::Query::Reports;
 use Data::Dumper;
@@ -20,6 +20,7 @@ my @args = (
     },
     { 
         range   => '7211',
+        count   => 1,
         results => { '7211' => {
                         'version'   => '1.25',
                         'dist'      => 'GD',
@@ -86,32 +87,40 @@ my $query = CPAN::Testers::WWW::Reports::Query::Reports->new();
 isa_ok($query,'CPAN::Testers::WWW::Reports::Query::Reports','.. got response');
 
 SKIP: {
-    skip "Network unavailable", 12 if(pingtest());
+    skip "Network unavailable", 13 if(pingtest());
 
     for my $args (@args) {
         if(defined $args->{date}) {
             my $data = $query->date( $args->{date} );
-            if($args->{results}) {
+            if($data && $args->{results}) {
                 is($data->{$_},$args->{results}{$_},".. got '$_' in date hash [$args->{date}]") for(keys %{$args->{results}});
+            } elsif($args->{results}) {
+                diag($query->error());
+                ok($query->error);
             } else {
                 is($data, undef,".. got no results, as expected [$args->{date}]");
             }
         } elsif(defined $args->{range}) {
             my $data = $query->range( $args->{range} );
-            if($args->{results}) {
-                #diag(Dumper( $data ));
-                is_deeply($data->{$_},$args->{results}{$_},".. got '$_' in range hash [$args->{range}]") 
-                    for(keys %{$args->{results}});
-            }
-            my @keys = sort { $a <=> $b } keys %$data;
-            if($args->{start}) {
-                is($keys[0], $args->{start},".. got start value [$args->{range}]");
-            }
-            if($args->{stop}) {
-                is($keys[-1], $args->{stop},".. got stop value [$args->{range}]");
-            }
-            if($args->{count}) {
-                cmp_ok(scalar @keys, '<=', $args->{count},".. counted number of records [$args->{range}]");
+            if($data) {
+                if($args->{results}) {
+                    #diag(Dumper( $data ));
+                    is_deeply($data->{$_},$args->{results}{$_},".. got '$_' in range hash [$args->{range}]") 
+                        for(keys %{$args->{results}});
+                }
+                my @keys = sort { $a <=> $b } keys %$data;
+                if($args->{start}) {
+                    is($keys[0], $args->{start},".. got start value [$args->{range}]");
+                }
+                if($args->{stop}) {
+                    is($keys[-1], $args->{stop},".. got stop value [$args->{range}]");
+                }
+                if($args->{count}) {
+                    cmp_ok(scalar @keys, '<=', $args->{count},".. counted number of records [$args->{range}]");
+                }
+            } else {
+                diag($query->error());
+                ok($query->error);
             }
         } else {
             ok(0,'missing date or range test');

@@ -1,5 +1,8 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 
+0.05	09/04/2012
+	- better error handling.
+
 0.04	06/04/2012
 	- added ping test & skip if no network.
 
