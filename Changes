@@ -1,5 +1,8 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 
+0.06	13/04/2012
+	- added skips in the event the site is down.
+
 0.05	09/04/2012
 	- better error handling.
 
