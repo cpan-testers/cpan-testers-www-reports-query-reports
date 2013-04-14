@@ -5,7 +5,7 @@ use lib qw(./lib);
 use Test::More tests => 14;
 
 use CPAN::Testers::WWW::Reports::Query::Reports;
-use Data::Dumper;
+#use Data::Dumper;
 
 # various argument sets for examples
 
