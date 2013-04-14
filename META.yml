@@ -1,5 +1,5 @@
 --- #YAML:1.0
-name:                CPAN::Testers::WWW::Reports::Query::Reports
+name:                CPAN-Testers-WWW-Reports-Query-Reports
 version:             0.06
 abstract:            Retrieve CPAN Testers metadata direct from the CPAN Testers website.
 author:
