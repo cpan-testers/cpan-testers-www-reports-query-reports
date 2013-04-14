@@ -1,6 +1,7 @@
 Changes
 examples/query.pl
 lib/CPAN/Testers/WWW/Reports/Query/Reports.pm
+LICENSE
 Makefile.PL
 MANIFEST
 META.json
