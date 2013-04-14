@@ -1,5 +1,6 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 
+0.07	2013-04-14
 	    - spelling fixes. (thanks to Florian Schlichting & Gregor Herrmann).
         - change file dates changed to meet W3CDTF standards.
         - upgraded to Test-CPAN-Meta-JSON
