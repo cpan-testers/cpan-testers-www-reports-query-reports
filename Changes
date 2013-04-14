@@ -1,21 +1,24 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 
-0.06	13/04/2012
-	- added skips in the event the site is down.
+	    - spelling fixes. (thanks to Florian Schlichting & Gregor Herrmann).
+        - change file dates changed to meet W3CDTF standards.
 
-0.05	09/04/2012
-	- better error handling.
+0.06	2012-04-13
+	    - added skips in the event the site is down.
 
-0.04	06/04/2012
-	- added ping test & skip if no network.
+0.05	2012-04-09
+	    - better error handling.
 
-0.03	05/04/2012
-	- missed JSON::XS from prereq lists :(
-	- added META.json (and test script)
+0.04	2012-04-06
+	    - added ping test & skip if no network.
 
-0.02    31/03/2012
-	- now with the correct README!
+0.03	2012-04-05
+	    - missed JSON::XS from prereq lists :(
+	    - added META.json (and test script)
 
-0.01    30/03/2012
+0.02    2012-03-31
+	    - now with the correct README!
+
+0.01    2012-03-30
         - First release
 
