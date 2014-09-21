@@ -122,7 +122,7 @@ sub range {
 
 sub _request {
     my $self    = shift;
-    my $param   = shift || return;
+    my $param   = shift;
     $self->{error} = '';
 
     my $url = join( '?', $URL, $param );
