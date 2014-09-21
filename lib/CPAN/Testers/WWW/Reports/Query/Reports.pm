@@ -60,8 +60,8 @@ for that date. A range request will return the records for the requested IDs.
 
 =head2 Caveat
 
-When using the range parameter, note that at most 2500 records will be 
-returned. This is to avoid accidental request for all the records! 
+Note that when using the range parameter, at most only 2500 records will be 
+returned. This is to avoid accidental requests for all records! 
 
 This value may change in the future.
 
@@ -227,7 +227,7 @@ Initially released during the 2012 QA Hackathon in Paris.
 
 =head1 COPYRIGHT AND LICENSE
 
-  Copyright (C) 2012-2013 Barbie for Miss Barbell Productions.
+  Copyright (C) 2012-2014 Barbie for Miss Barbell Productions.
 
   This module is free software; you can redistribute it and/or
   modify it under the Artistic License 2.0.
