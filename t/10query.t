@@ -2,7 +2,7 @@
 use strict;
 
 use lib qw(./lib);
-use Test::More tests => 14;
+use Test::More tests => 26;
 
 use CPAN::Testers::WWW::Reports::Query::Reports;
 #use Data::Dumper;
@@ -12,11 +12,10 @@ use CPAN::Testers::WWW::Reports::Query::Reports;
 my @args = (
     { 
         date    => '2005-02-08',
-        results => { from => 182971, to => 183076, range => '182971-183076' }
-    },
-    { 
-        date    => '',
-        results => undef
+        results => { from => 182971, to => 183076, range => '182971-183076' },
+        error   => '',
+        raw     => '{"to":"183076","from":"182971","range":"182971-183076","list":["182971","182972","182978","182979","182980","182981","182982","182983","182984","182985","182986","182987","182988","182989","182990","182991","182992","182993","182994","182995","182996","182997","182998","182999","183000","183001","183002","183005","183006","183007","183008","183009","183010","183011","183012","183013","183014","183015","183016","183017","183018","183019","183020","183021","183022","183023","183024","183025","183026","183027","183028","183029","183030","183031","183033","183034","183037","183039","183040","183041","183042","183045","183046","183047","183048","183049","183051","183052","183053","183054","183055","183056","183057","183058","183059","183060","183061","183062","183063","183064","183065","183066","183067","183069","183070","183076"]}
+'
     },
     { 
         range   => '7211',
@@ -35,7 +34,10 @@ my @args = (
                         'id'        => '7211',
                         'type'      => '2',
                         'tester'    => 'schinder@pobox.com'
-                   } }
+                   } },
+        error   => '',
+        raw     => '{"7211":{"version":"1.25","dist":"GD","osvers":"2.7","state":"pass","perl":"5.5.3","fulldate":"200002231727","osname":"solaris","postdate":"200002","type":"2","id":"7211","guid":"00007211-b19f-3f77-b713-d32bba55d77f","platform":"sun4-solaris","tester":"schinder@pobox.com"}}
+'
     },
     { 
         range   => '7211-',
@@ -55,7 +57,8 @@ my @args = (
                         'id'        => '7211',
                         'type'      => '2',
                         'tester'    => 'schinder@pobox.com'
-                   } }
+                   } },
+        error   => ''
     },
     { 
         range   => '-7211',
@@ -75,23 +78,51 @@ my @args = (
                         'id'        => '7211',
                         'type'      => '2',
                         'tester'    => 'schinder@pobox.com'
-                   } }
+                   } },
+        error   => ''
     },
     { 
         range   => '-',
-        count   => 2500
-    }
+        count   => 2500,
+        error   => ''
+    },
+
+    # bad data
+
+    { 
+        date    => '',
+        results => undef,
+        error   => ''
+    },
+    { 
+        date    => 'blah',
+        results => undef,
+        error   => ''
+    },
+    { 
+        range   => '',
+        results => undef,
+        error   => ''
+    },
+    { 
+        range   => 'blah',
+        results => undef,
+        error   => ''
+    },
 );
 
 my $query = CPAN::Testers::WWW::Reports::Query::Reports->new();
 isa_ok($query,'CPAN::Testers::WWW::Reports::Query::Reports');
 
 SKIP: {
-    skip "Network unavailable", 13 if(pingtest());
+    skip "Network unavailable", 25 if(pingtest());
 
     for my $args (@args) {
         if(defined $args->{date}) {
             my $data = $query->date( $args->{date} );
+            is($query->error,$args->{error},'.. no error reported');
+            is($query->raw,$args->{raw},'.. raw query matches') if(defined $args->{raw});
+
             if($data && $args->{results}) {
                 is($data->{$_},$args->{results}{$_},".. got '$_' in date hash [$args->{date}]") for(keys %{$args->{results}});
             } elsif($args->{results}) {
@@ -107,6 +138,9 @@ SKIP: {
             }
         } elsif(defined $args->{range}) {
             my $data = $query->range( $args->{range} );
+            is($query->error,$args->{error},'.. no error reported');
+            is($query->raw,$args->{raw},'.. raw query matches') if(defined $args->{raw});
+
             if($data) {
                 if($args->{results}) {
                     #diag(Dumper( $data ));
