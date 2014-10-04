@@ -126,13 +126,15 @@ sub _request {
     $self->{error} = '';
 
     my $url = join( '?', $URL, $param );
-    #print "URL: $url\n";
+#print STDERR "# URL: $url\n";
 	eval { $mech->get( $url ); };
     if($@ || !$mech->success()) {
+#print STDERR "# ERROR: $@, ".$mech->success."\n";
         $self->{error} = $@;
         return;
     }
 
+#print STDERR "# CONTENT=".$mech->content."\n";
     $self->{content} = $mech->content;
 }
 
