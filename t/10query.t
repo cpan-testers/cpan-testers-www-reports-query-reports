@@ -129,7 +129,7 @@ isa_ok($query,'CPAN::Testers::WWW::Reports::Query::Reports');
 }
 
 SKIP: {
-    skip "Network unavailable", 21 if(pingtest());
+    skip "Network unavailable", 19 if(pingtest());
 
     for my $args (@args) {
         if(defined $args->{date}) {
