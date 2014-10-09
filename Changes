@@ -1,6 +1,7 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 ===========================================================
 
+0.09	2014-10-09
         - realignment of bad data tests.
         - added timeout skips.
         - added non-live tests.
