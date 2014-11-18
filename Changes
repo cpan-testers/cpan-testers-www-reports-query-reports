@@ -1,6 +1,8 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 ===========================================================
 
+        - added 'cannot connect' to skip reasons.
+
 0.09	2014-10-09
         - realignment of bad data tests.
         - added timeout skips.

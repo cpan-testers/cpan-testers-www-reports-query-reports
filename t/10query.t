@@ -138,7 +138,7 @@ SKIP: {
 
             SKIP: {
                 skip "Request timeout, skipping", $skip + 2
-                    if($query->error && $query->error =~ /read timeout/);
+                    if($query->error && $query->error =~ /read timeout|Can't connect to www.cpantesters.org/);
 
                 is($query->error,$args->{error},'.. no error reported');
                 is($query->raw,$args->{raw},'.. raw query matches') if(defined $args->{raw});
@@ -166,7 +166,7 @@ SKIP: {
 
             SKIP: {
                 skip "Request timeout, skipping", $skip + 2
-                    if($query->error && $query->error =~ /read timeout/);
+                    if($query->error && $query->error =~ /read timeout|Can't connect to www.cpantesters.org/);
 
                 is($query->error,$args->{error},'.. no error reported');
                 is($query->raw,$args->{raw},'.. raw query matches') if(defined $args->{raw});
