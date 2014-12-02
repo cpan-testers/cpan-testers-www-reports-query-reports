@@ -1,6 +1,7 @@
 Revision history for CPAN-Testers-WWW-Reports-Query-Reports
 ===========================================================
 
+0.10	2014-12-02
         - added 'cannot connect' to skip reasons.
         - ping fix for Cygwin.
 
